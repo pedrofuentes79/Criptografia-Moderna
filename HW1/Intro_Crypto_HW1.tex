@@ -229,9 +229,33 @@ Say the user encrypts his password using the shift cipher, and the attacker sees
 \question We look at the different conditions under which the shift and mono-alphabetic substitution ciphers are perfectly secret:
 \begin{parts}
     \part[4] Prove that if only a single character is encrypted, then the shift cipher is perfectly secret.
-    % \begin{solution}
-    % % Uncomment and type your solution here
-    % \end{solution}
+    \begin{solution}
+        Buscamos demostrarlo usando la definición de indistinguibilidad. Quiero ver que, para todo $m_1, m_2 \in \mathcal{M}$ (con $|\mathcal{M}| = 1$), se cumple que:  
+        \[
+            P(\text{Enc}_k(m_1) = c) = P(\text{Enc}_k(m_2) = c)
+        \]
+        Veamos para un $m$ arbitrario.
+        Luego, por definición del shift cipher:
+        \[
+            P(m + k \mod |\mathcal{M}| = c) 
+        \]
+        Reorganizando
+        \[
+            P(k = (c - m) \mod |\mathcal{M}|) 
+        \]
+        Vemos que hay una sola clave que hace válida la igualdad. Como la clave se elige aleatoriamente de manera uniforme, la probabilidad de que la clave sea la que hace válida la igualdad es $1$ entre $|\mathcal{K}|$. 
+        \[
+            P(k = (c - m) \mod |\mathcal{M}|) = \frac{1}{|\mathcal{K}|}
+        \]
+        Y, como estamos en un shift cipher de un solo caracter, $|\mathcal{K}| = |\mathcal{M}|$. Por ende, 
+        \[
+            P(k = (c - m) \mod |\mathcal{M}|) = \frac{1}{|\mathcal{M}|}
+        \]
+
+        Finalmente, esto vale para todo $m \in \mathcal{M}$. Concluimos entonces que es indistinguible, y por ende es perfectamente secreto.
+        \qed
+
+    \end{solution}
     \part[3] Does the perfectly secret conditional probability equation hold for the mono-alphabetic substitution cipher? Elaborate.
     % \begin{solution}
     % % Uncomment and type your solution here
