@@ -257,9 +257,26 @@ Say the user encrypts his password using the shift cipher, and the attacker sees
 
     \end{solution}
     \part[3] Does the perfectly secret conditional probability equation hold for the mono-alphabetic substitution cipher? Elaborate.
-    % \begin{solution}
-    % % Uncomment and type your solution here
-    % \end{solution}
+    \begin{solution}      
+        No, el cipher mono-alfabético de sustitución no es perfecto. Veamoslo con un contraejemplo. 
+        
+        Tomamos $m_1 = "aa"$, $m_2 = "ba"$ y $c = "cd"$.
+
+        Vemos que la probabilidad de que $c$ sea el ciphertext de $m_1$ es nula, ya que no hay ninguna sustitución mono alfabética que transforme "aa" en "cd" (pues no puede transformar la "a" en la "c" y la "a" en la "d" al mismo tiempo).
+        Luego:
+
+        \[
+            P(Enc_k(m_1) = c) = 0
+        \]
+
+        Vemos que la probabilidad de que $c$ sea el ciphertext de $m_2$ no es nula, ya que a simple vista existe una sustitución mono alfabética que transforme "ba" en "cd" (la "b" se transforma en la "c" y la "a" en la "d").
+
+        No es necesario calcular la probabilidad exacta, ya que basta con saber que es no nula. 
+
+        Luego, no vale la igualdad de probabilidades. Por ende, el cipher mono-alfabético de sustitución no es perfecto.
+        \qed
+
+    \end{solution}
     \part[3] What is the largest message space $\cal M$ for which the mono-alphabetic substitution cipher provides perfect secrecy?
     % \begin{solution}
     % % Uncomment and type your solution here

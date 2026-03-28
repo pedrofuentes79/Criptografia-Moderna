@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.3.28)  28 MAR 2026 19:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.3.28)  28 MAR 2026 20:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -682,7 +682,13 @@ zplm/m/n/12 )$\OT1/pplx/m/n/12 (-20) . Veamoslo
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts
-/enc/dvips/base/8r.enc}] [2] [3] [4] [5]
+/enc/dvips/base/8r.enc}] [2] [3] [4]
+Overfull \hbox (9.7561pt too wide) in paragraph at lines 261--262
+\OT1/pplx/b/n/12 (-20) Solution:\OT1/pplx/m/n/12 (-20) No, el ci-pher mono-alfa
+b[]etico de susti-tuci[]on no es per-fecto. Veamoslo
+ []
+
+[5] [6]
 This exam contains 6 questions with 5 parts, 0 subparts, and 0 subsubparts.
 This exam has a total of 60 points.
 This exam has a total of 0 bonus points.
@@ -699,10 +705,10 @@ Package rerunfilecheck Info: File `Intro_Crypto_HW1.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 15575 strings out of 469515
- 238354 string characters out of 5470807
- 719723 words of memory out of 5000000
- 43771 multiletter control sequences out of 15000+600000
+ 15579 strings out of 469515
+ 238405 string characters out of 5470807
+ 719748 words of memory out of 5000000
+ 43774 multiletter control sequences out of 15000+600000
  664387 words of font info for 249 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,11n,84p,1013b,877s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -716,10 +722,10 @@ r/share/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/share/texmf-dist
 ic/fpl/fplrc8a.pfb></usr/share/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><
 /usr/share/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texmf-dis
 t/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on Intro_Crypto_HW1.pdf (5 pages, 151713 bytes).
+Output written on Intro_Crypto_HW1.pdf (6 pages, 153219 bytes).
 PDF statistics:
- 108 PDF objects out of 1000 (max. 8388607)
- 76 compressed objects within 1 object stream
- 20 named destinations out of 1000 (max. 500000)
+ 112 PDF objects out of 1000 (max. 8388607)
+ 79 compressed objects within 1 object stream
+ 21 named destinations out of 1000 (max. 500000)
  67073 words of extra memory for PDF output out of 74296 (max. 10000000)
 
