@@ -180,9 +180,49 @@ Say the user encrypts his password using the shift cipher, and the attacker sees
 %\newpage
 
 \question[10] We proved in class that if a cipher is {\em perfectly secure/secret}, then it is {\em indistinguishable}. Prove the \textbf{opposite} direction. Begin by stating the perfect security and indistinguishability properties.
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+    Un cipher es perfecto si: \\
+    $P(\text{plaintext} = m | \text{ciphertext} = c) = P(\text{plaintext = m})$, para cualquier $m \in \mathcal{M}$.
+
+    Un cipher es indistinguible si: \\
+    $\forall m_1, m_2, c, P(Enc(m_1) = c) = P(Enc(m_2) = c)$
+
+    Queremos ver que si es indistinguible, entonces es perfecto. Es decir:
+    \begin{align*}
+        \forall m_1, m_2 \in \mathcal{M}, \forall c: P(\text{Enc}_K(m_1) = c) = P(\text{Enc}_K(m_2) = c) \\  
+        \implies \forall m, c: P(M = m \mid C = c) = P(M = m)
+    \end{align*}
+    
+    Donde $M$ es el plaintext, $C$ es el ciphertext y $\mathcal{M}$ es el espacio de mensajes.
+
+    Sea $m \in \mathcal{M}$ y $c$ un ciphertext con $P(C = c) > 0$. Por Bayes:
+    \[
+        P(M = m \mid C = c) = \frac{P(C = c \mid M = m) \cdot P(M = m)}{P(C = c)}
+    \]
+    Luego, basta ver que $P(C = c \mid M = m) = P(C = c)$, de ese modo se cancela con el denominador y queda $P(M = m \mid C = c) = P(M = m)$, que es lo que queremos demostrar. 
+
+    Vemos que $P(C = c \mid M = m) = P(Enc(m) = c)$. Vemos que esta probabilidad es igual para todo $m \in \mathcal{M}$, por indistinguibilidad. Llamamos a este valor $\alpha$, independientemente de qué $m$ tomemos.
+
+    Veamos ahora que $P(C = c) = \alpha$.
+
+    Por probabilidad total:
+    \begin{align*}
+        P(C = c) = \sum_{m' \in \mathcal{M}} P(C = c \mid M = m') \cdot P(M 
+        = m') 
+    \end{align*}
+    Luego, 
+    \begin{align*}
+        P(C = c) = \sum_{m' \in \mathcal{M}} P(Enc(m') = c) \cdot P(M = m')
+    \end{align*}
+    Reemplazamos por $\alpha$:
+    \[
+        P(C = c) = \alpha \cdot \sum_{m' \in \mathcal{M}} P(M = m') = \alpha \cdot 1 = \alpha
+    \]
+
+    Luego, queda demostrado que $P(C = c) = \alpha = P(C = c \mid M = m)$, por ende $P(M = m \mid C = c) = P(M = m)$, que es lo que queríamos demostrar.
+    \qed
+
+\end{solution}
 
 %\newpage
 
