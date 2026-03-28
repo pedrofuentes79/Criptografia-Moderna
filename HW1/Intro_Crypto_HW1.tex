@@ -278,9 +278,27 @@ Say the user encrypts his password using the shift cipher, and the attacker sees
 
     \end{solution}
     \part[3] What is the largest message space $\cal M$ for which the mono-alphabetic substitution cipher provides perfect secrecy?
-    % \begin{solution}
-    % % Uncomment and type your solution here
-    % \end{solution}
+    \begin{solution}
+        Vemos que solo se cumple para $|\mathcal{M}| = 1$. Como vimos anteriormente, con $|\mathcal{M}| = 2$ ya no es perfecto. 
+
+        La demostración es muy similar a la de que el shift cipher de un caracter es perfcecto, solamente que la clave no es un shift, si no un mapeo uno a uno entre los caracteres.
+
+        Tomemos $m_1, m_2 \in \mathcal{M}$ y $c$ un ciphertext. Veamos que vale la propiedad de indistinguibilidad, y por ende que es perfecto.
+
+        \[
+            P(Enc_k(m_1) = c) = P(Enc_k(m_2) = c)
+        \]
+
+        \[
+            P(k_{m_1} = c) = P(k_{m_2} = c)
+        \]
+        
+        Donde $k_{m_1}$ es la sustitución de $m_1$ en la clave $k$.
+
+        Vemos que estas probabilidades son iguales para todo $m_1, m_2 \in \mathcal{M}$, dado que la clave es una cualquiera (y es de una distribución uniforme). Por ende, es indistinguible, y por ende es perfecto.
+        \qed
+
+    \end{solution}
 \end{parts}
 
 %\newpage
