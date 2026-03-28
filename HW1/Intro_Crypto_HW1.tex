@@ -173,9 +173,10 @@ for a total of \numpoints \ points.
 \question[10] Assume an attacker knows that a user’s password is either \texttt{abcd} or \texttt{bedg}.
 Say the user encrypts his password using the shift cipher, and the attacker sees the resulting ciphertext. Show how the attacker can determine the user’s password, or explain why this is not possible.
 
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+    En el caso de que la contraseña sea \texttt{abcd}, el cifrado va a ser de cuatro letras consecutivas, ya que se usa el shift cipher, cualquiera sea el $k$ elegido para shiftear. En el caso de que sea \texttt{bedg}, el cifrado no va a tener letras consecutivas, puesto que las letras de esta contraseña no son consecutivas en el abecedario. 
+    Luego, el atacante puede distinguir cual es la contraseña simplemente viendo si el cifrado tiene letras consecutivas o no.
+\end{solution}
 
 %\newpage
 
