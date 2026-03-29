@@ -272,9 +272,13 @@ INPUT /usr/share/texmf-dist/fonts/vf/public/mathpazo/zplmr7y.vf
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/mathpazo/fplmr.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm
+INPUT /usr/share/texmf-dist/fonts/vf/adobe/palatino/pplr9t.vf
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmss9.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmss8.tfm
-INPUT /usr/share/texmf-dist/fonts/vf/adobe/palatino/pplr9t.vf
+INPUT /usr/share/texmf-dist/fonts/vf/public/mathpazo/zplmr7m.vf
+INPUT /usr/share/texmf-dist/fonts/tfm/public/mathpazo/fplmri.tfm
+INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm
+INPUT /usr/share/texmf-dist/fonts/tfm/adobe/palatino/pplri8r.tfm
 INPUT Intro_Crypto_HW1.aux
 INPUT ./Intro_Crypto_HW1.out
 INPUT ./Intro_Crypto_HW1.out

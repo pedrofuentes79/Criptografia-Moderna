@@ -309,9 +309,56 @@ Say the user encrypts his password using the shift cipher, and the attacker sees
       $E_{k_1,k_2}(m) = (k_1\mathbin\Vert 1 \mathbin\Vert k_2) \oplus m$,
 \end{center}
 where $m \in \{0,1\}^n$, $k_1 \in \{0,1\}^k$, $k_2 \in \{0,1\}^\ell$, and $\Vert$ denotes concatenation. What if instead, the message space is modified to only include messages for which the $(k+1)$th bit is $0$ (i.e., $\mathcal{M}=\big\{m_1\mathbin\Vert0\mathbin\Vert m_2\mathbin\big\vert m_1\in\{0,1\}^k,m_2\in\{0,1\}^\ell\big\}$)?
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+    Para el primer esquema, vemos que no es perfecto. Para esto vamos a ver que no cumple indistinguibilidad, es decir que hay un par de mensajes $m_1, m_2$ y un ciphertext $c$ tal que $P(Enc_{k_1,k_2}(m_1) = c) \neq P(Enc_{k_1,k_2}(m_2) = c)$.
+    Elegimos $m_1 = 1^n$, $m_2 = 0^n$ y $c = 1^n$, para cualquier $n$. Tampoco ponemos restricción en $k_1$, $k_2$ ni en sus longitudes. 
+    Vemos que:
+    \[
+        P(Enc_{k_1,k_2}(m_1) = c) = P((k_1 \mathbin\Vert 1 \mathbin\Vert k_2) \oplus 1^n = 1^n) = 0
+    \]
+    Esto es porque $1 \oplus 1 = 0$. Entonces, cualquiera sea $k$ (la longitud de $k_1$), cuando se aplique el $\oplus$ con $1^n$, el ($k+1$)-ésimo bit será $0$. 
+
+    Vemos ahora que la probabilidad con $m_2$ es distinta de 0.
+    \[
+        P(Enc_{k_1,k_2}(m_2) = c) = P((k_1 \mathbin\Vert 1 \mathbin\Vert k_2) \oplus 0^n = 1^n) > 0
+    \]
+    Esto es porque $1 \oplus 0 = 1$. Entonces, cualquiera sea $k$ (la longitud de $k_1$), cuando se aplique el $\oplus$ con $0^n$, el ($k+1$)-ésimo bit será $1$. 
+    
+    No hace falta calcular la probabilidad exacta, que se puede calcular con combinatorias y las longitudes de $k_1$ y $k_2$, basta con ver que existen claves $k_1$ y $k_2$ tales que se puede generar el ciphertext $c$ con $m_2$ como plaintext. 
+
+    Luego, las probabilidades no son iguales, y por ende no es perfecto.
+    \qed \\
+
+
+    El segundo esquema sí es perfecto. Para verlo, vemos que cumple indistinguibilidad. Veamos la probabilidad para un mensaje $m = m_1 \mathbin\Vert 0 \mathbin\Vert m_2$ genérico, y si logramos llegar a una probabilidad que no dependa de $m_1$ ni $m_2$, entonces es perfecto (ya que podríamos llegar a la misma probabilidad con cualquier otro mensaje del espacio de mensajes)
+    \[
+        P(Enc_{k_1,k_2}(m_1 \mathbin\Vert 0 \mathbin\Vert m_2) = c) 
+    \]
+    \[
+        P(k_1 \oplus m_1 \mathbin\Vert 1 \mathbin\Vert k_2 \oplus m_2 = c)
+    \]
+    En el caso de que $c$ tenga un $0$ en el ($k+1$)-ésimo bit, la probabilidad es 0 (lo cual cumple lo que queríamos ver). Asumimos a partir de ahora que $c$ tiene un $1$ en el ($k+1$)-ésimo bit. Es decir, $c = c_1 \mathbin\Vert 1 \mathbin\Vert c_2$.
+
+    \[
+        P(k_1 \oplus m_1 = c_1 \land k_2 \oplus m_2 = c_2)
+    \]
+    Vemos que estas probabilidades son independientes, ya que la clave $k_1$ no afecta a la clave $k_2$ y viceversa.
+    \[
+        P(k_1 \oplus m_1 = c_1) \cdot P(k_2 \oplus m_2 = c_2)
+    \]
+
+    Analicémoslas una por una. La cantidad de claves posibles para $k_1$ es $2^k$. Luego, hay una sola que, dados $m_1, c_1 \in \{0,1\}^k$, haga válida la igualdad. Por ende, la probabilidad es $\frac{1}{2^k}$. Análogamente, $P(k_2 \oplus m_2 = c_2) = \frac{1}{2^\ell}$.
+
+    Luego, la probabilidad total es:
+    \[
+        P(Enc_{k_1,k_2}(m_1 \mathbin\Vert 0 \mathbin\Vert m_2) = c) = \frac{1}{2^k} \cdot \frac{1}{2^\ell}
+    \]
+    Que no depende de $m_1$ ni $m_2$, que es lo que queríamos ver. 
+    \qed
+
+
+
+\end{solution}
 
 %\newpage
 
