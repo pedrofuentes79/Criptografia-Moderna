@@ -50,7 +50,7 @@
 \def\hwnum{1}
 \def\issuedate{26/3/26}
 \def\duedate{7/4/25, 23:59 hs} % 
-\def\yourname{} % put your name here
+\def\yourname{Pedro Fuentes Urfeig} 
 %------------------------------%
 
 \ifstudent
@@ -125,7 +125,7 @@ for a total of \numpoints \ points.
                 \lim_{n \to \infty} \frac{n^{-1/n}}{1/p(n)} = 
                 \lim_{n \to \infty} \frac{p(n)}{n^{1/n}} = \infty
             \]
-        Vemos que en este caso, el denominador tiende a $0$ y el numerador tiende a $\infty$, luego el límite es $\infty$ y $f(n)$ no es negligible.
+        Vemos que en este caso, el denominador tiende a $1$ y el numerador tiende a $\infty$, luego el límite es $\infty$ y $f(n)$ no es negligible.
         \end{solution}
         \item $f(n)=1/n$ for odd $n$ and $f(n)=2^{-n}$ for even $n$
         \begin{solution}
@@ -231,7 +231,7 @@ Say the user encrypts his password using the shift cipher, and the attacker sees
 \begin{parts}
     \part[4] Prove that if only a single character is encrypted, then the shift cipher is perfectly secret.
     \begin{solution}
-        Buscamos demostrarlo usando la definición de indistinguibilidad. Quiero ver que, para todo $m_1, m_2 \in \mathcal{M}$ (con $|\mathcal{M}| = 1$), se cumple que:  
+        Buscamos demostrarlo usando la definición de indistinguibilidad. Quiero ver que, para todo $m_1, m_2 \in \mathcal{M}$ (con $|m_1| = |m_2| = 1$), se cumple que:  
         \[
             P(\text{Enc}_k(m_1) = c) = P(\text{Enc}_k(m_2) = c)
         \]
@@ -280,7 +280,7 @@ Say the user encrypts his password using the shift cipher, and the attacker sees
     \end{solution}
     \part[3] What is the largest message space $\cal M$ for which the mono-alphabetic substitution cipher provides perfect secrecy?
     \begin{solution}
-        Vemos que solo se cumple para $|\mathcal{M}| = 1$. Como vimos anteriormente, con $|\mathcal{M}| = 2$ ya no es perfecto. 
+        Vemos que solo se cumple para mensajes de longitud $1$, es decir $|\mathcal{M}| = |\Sigma|$. Como vimos anteriormente, con mensajes de longitud $2$ ya no es perfecto. 
 
         La demostración es muy similar a la de que el shift cipher de un caracter es perfcecto, solamente que la clave no es un shift, si no un mapeo uno a uno entre los caracteres.
 
@@ -296,7 +296,7 @@ Say the user encrypts his password using the shift cipher, and the attacker sees
         
         Donde $k_{m_1}$ es la sustitución de $m_1$ en la clave $k$.
 
-        Vemos que estas probabilidades son iguales para todo $m_1, m_2 \in \mathcal{M}$, dado que la clave es una cualquiera (y es de una distribución uniforme). Por ende, es indistinguible, y por ende es perfecto.
+        Vemos que estas probabilidades son iguales para todo $m_1, m_2 \in \mathcal{M}$, con $|m_1| = |m_2| = 1$, dado que la clave es una cualquiera (y es de una distribución uniforme). Por ende, es indistinguible, y por ende es perfecto.
         \qed
 
     \end{solution}
