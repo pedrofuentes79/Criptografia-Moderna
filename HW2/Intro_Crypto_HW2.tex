@@ -127,9 +127,23 @@ for a total of \numpoints \ points.
 
 
 \question[10] Show that the encryption scheme presented in Lecture 5 (p. 21) is CCA-secure.
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+  La diferencia entre CCA-seguro y CPA-seguro es que en CCA-seguro el adversario puede decriptar cualquier ciphertext (excepto el target ciphertext).
+  
+  En este caso, vemos que el adversario recibe un $c^*$. Las opciones que tiene son: 
+  \begin{itemize}
+    \item Encriptar mensajes arbitrarios.
+    \item Decriptar ciphertexts arbitrarios (posibles modificaciones de $c^*$, o ciphers de mensajes arbitrarios). 
+  \end{itemize}
+
+  Si encripta mensajes arbitrarios, va a recibir un ciphertext. Desencriptarlo sin modificaciones va a devolver el mismo mensaje, lo que no aporta nueva información. Mas formalmente, si toma $m'$ y pide encriptar tal que $c' = Enc_k(m')$, pedir decriptar $c'$ va a dar $m' = Dec_k(c')$. 
+
+  El cipher en sí es el resultado de una PRP, en el cual la clave es secreta. Entonces no hay mucho que se pueda inferir sobre el contenido de $x$, $r$ o $0^n$ a partir de un ciphertext arbitrario. 
+
+  Si el adversario intenta modificar $c^*$ para luego intentar decriptarlo y obtener información, tiene probabilidades negligibles de encontrar un cipher válido. En particular, de $\frac{1}{2^{n}}$, dado que los ciphers válidos son los que terminan en $0^n$. Además, si encuentra un cipher que sea válido, con mínimas modificaciones a $c^*$, no quiere decir que ese cipher modificado tenga el mismo mensaje $x$. 
+  
+  Por ende, vemos que agregar el oráculo de decripción no aporta nada. Con ver que es CPA-seguro alcanza. Y esto es bastante simple de ver, ya que $F_k$ es PRP, y lo que se encripta recibe siempre un $r$ fresco uniforme de input que hace que las encripciones sean indistinguibles unas de otras. 
+\end{solution}
 
 
 \question Prove that the following modifications of basic CBC-MAC {\bf do not} yield a secure MAC (even for fixed-length messages):
