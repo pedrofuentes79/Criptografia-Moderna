@@ -1,0 +1,169 @@
+\documentclass[12pt,addpoints,answers]{exam}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{microtype}
+\usepackage{xspace}
+\usepackage[svgnames]{xcolor}
+\usepackage[sc]{mathpazo}
+\usepackage{enumitem}
+\usepackage{bm}
+
+%----------Header--------------------%
+\def\course{{\sc Introduccion a la Criptografia Moderna}}
+\def\term{Depto. de Computaci\'{o}n, FCEN, UBA, 1er. Bimestre 2026}
+\def\prof{Lecturer: Juan Garay}
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{\arabic{page}}
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { \hfill \large{\course} \hfill }
+    \vspace{2mm}
+%    \hbox to 5.78in { \hfill \large{\prof} \hfill }
+%       \vspace{2mm}
+       \hbox to 5.78in { {\Large \hfill \textbf{#5}  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { \term \hfill \emph{#2}}
+       \hbox to 5.78in { {#3 \hfill \emph{#4}}}
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+\newcommand{\hw}[4]{\handout{#1}{#2}{#3}{#4}{Homework #1}}
+
+% -- For ignoring stuff -- %
+\newcommand{\ignore}[1]{}
+
+
+\begin{document}
+
+%----Specs: change accordingly-----%
+\newif\ifstudent % comment out false
+\studenttrue 
+% \studentfalse
+
+\def\hwnum{2}
+\def\issuedate{14/4/26}
+\def\duedate{23/4/25, 23:59 hs} % 
+\def\yourname{} % put your name here
+%------------------------------%
+
+\ifstudent
+\hw{\hwnum}{\issuedate}{Student: \yourname}{Due: \duedate}%
+\else
+\hw{\hwnum}{\issuedate}{\prof}{Due: \duedate}%
+\fi
+
+\noindent \textbf{Instructions}
+
+\begin{itemize}
+    \item Upload your solution to Campus; make sure it's only one file, and clearly write your name on the first page. Name the file \textsf{`$<$your last name$>$\_HW2.pdf.'} 
+    %{\bf Important:} Make sure to tap {\bf Turn in} after you upload your solution.   
+      
+     If you are proficient with \LaTeX, you may also typeset your submission and submit in PDF format. To do so, uncomment the ``\%\textbackslash begin\{solution\}'' and ``\%\textbackslash end\{solution\}'' lines and write your solution between those two command lines.
+    
+      \item Your solutions will be graded on \emph{correctness} and
+    \emph{clarity}. You should only submit work that you believe to be
+    correct.
+    % , and you will get significantly more partial credit if you     clearly identify the gap(s) in your solution.
+    
+    \item You may collaborate with others on this problem set.  However,
+    you must \textbf{{write up your own solutions}} and \textbf{{list
+      your collaborators and any external sources (including ChatGPT and similar generative AI chatbots)}} for each
+    problem. Be ready to explain your solutions orally to a member of the course's staff
+    if asked.
+    
+    \ignore{
+    \item For problems that require you to provide an algorithm, you must
+    give a precise description of the algorithm, together with a proof
+    of correctness and an analysis of its running time. You may use
+    algorithms from class as subroutines. You may also use any facts
+    that we proved in class or from the book.
+    } %IGNORE
+    
+\end{itemize}
+
+
+\noindent This assignment contains \numquestions\ questions,
+% \numpages\ pages
+for a total of \numpoints \ points.
+% and \numbonuspoints\ bonus points.
+
+\bigskip
+%\newpage
+
+\begin{questions}
+
+
+\question Let $F$ be a pseudorandom permutation. For each of the following encryption schemes (where the key is a uniform $k\in\{0,1\}^n$), show how to decrypt and then state whether the scheme is CPA-secure. Explain your answers.
+\begin{parts}
+    \part[5] To encrypt $m\in\{0,1\}^n$, choose uniform $r\in\{0,1\}^n$ and output the ciphertext $\langle r,F_k(m)\oplus r\rangle$.
+    \begin{solution}
+      Para decriptar, tenemos que reconocer los dos elementos de la tupla (asumimos una codificación estandar para esto). Luego, podemos hacer la inversa del XOR con $r$ (el primer elemento de la tupla) para obtener $F_k(m)$. Luego, como tenemos $k$, aplicamos la inversa de $F_k$ para obtener $m$.
+
+      Vemos que este esquema no es CPA-seguro. Para demostrarlo mostramos una estrategia que puede seguir el adversario en el experimento de $Priv_k$. 
+  
+      El adversario, una vez que entrega los $m_0$ y $m_1$ y recibe la versión encriptada de uno de los dos, pide encriptar al oráculo $m_0$. Luego, a ambos ciphertexts los manipula para llegar a $F_k(m_0)$ y $F_k(m_b)$ (lo hace con el primer paso de la decriptación mostrada antes, es trivial para cualquier tupla). De ese modo, como $F_k$ es una función determinística, $F_k(m_0) = F_k(m_b)$ si $b = 0$, y si no son iguales es porque $b=1$. 
+      Luego, el adversario tiene probabilidad mayor a $\frac{1}{2}$ de ganar el experimento y el esquema no es CPA-seguro.
+
+    \end{solution}
+    \part[5] To encrypt $m\in\{0,1\}^n$, choose uniform $r\in\{0,1\}^n$ and output the ciphertext $\langle r,F_r(k)\oplus m\rangle$.
+    \begin{solution}
+      Para decriptar, tenemos que reconocer los dos elementos de la tupla, $r$ y $F_r(k)\oplus m$. Luego, podemos generar $F_r(k)$ (dado que tenemos $k$) y hacer la inversa del XOR para obtener $m$. 
+
+      Vemos que este esquema tampoco es CPA-seguro. Para demostrarlo veamos el siguiente escenario. El adversario entrega $m_0$ y $m_1$ y recibe $ c = \langle r, F_r(k) \oplus m_b \rangle $. Luego, conoce $r$, y $F$ es una función pública. Pide al oráculo que encripte un $m_2$ tal que $m_2 = 0^n$ y recibe $ c' = \langle r_2, F_r(k) \oplus 0^n \rangle $. Entonces obtiene $F_{r_2}(k)$ haciendo el XOR con $0^n$.
+      
+      Luego, para obtener $k$ puede hacer lo siguiente. Como $F$ es pública, tiene $r_2$ y tiene $F_{r_2}(k)$, $k = F_{r_2}^{-1}(F_{r_2}(k))$. 
+     
+      Luego, volviendo al ciphertext original, $c = \langle r, F_r(k) \oplus m_b \rangle $, puede obtener $m_b$ haciendo el XOR con $F_r(k)$, dado que ahora conoce $k$, $r$ y $F$. Entonces compara $m_b$ con $m_0$ y $m_1$ y gana el experimento con probabilidad 1.
+      
+    \end{solution}
+\end{parts}
+
+
+\question[10] Show that the encryption scheme presented in Lecture 5 (p. 21) is CCA-secure.
+% \begin{solution}
+% % Uncomment and type your solution here
+% \end{solution}
+
+
+\question Prove that the following modifications of basic CBC-MAC {\bf do not} yield a secure MAC (even for fixed-length messages):
+\begin{parts}
+    \part[5] {\sf Mac} outputs all blocks $t_1,\ldots,t_\ell$, rather than just $t_\ell$. (Verification only checks whether $t_\ell$ is correct.)
+    % \begin{solution}
+    % % Uncomment and type your solution here
+    % \end{solution}
+    \part[5] A random initial block is used each time a message is authenticated. That is, choose uniform $t_0\in\{0,1\}^n$, run basic CBC-MAC over the ``message'' $t_0,m_1,\ldots,m_\ell$, and output the tag $\langle t_0,t_\ell\rangle$. Verification is done in the natural way.
+    % \begin{solution}
+    % % Uncomment and type your solution here
+    % \end{solution}
+\end{parts}
+
+
+\question
+\begin{parts}
+
+\part[5] Provide formal security definitions for {\em second preimage resistance} and {\em preimage resistance} of hash functions, similar to the definition of collision resistance we saw in Lecture 6. 
+% \begin{solution}
+% % Uncomment and type your solution here
+% \end{solution}
+\part[5] Prove that any hash function that is collision resistant is second-preimage resistant, and any hash function that is second-preimage resistant is preimage resistant.
+% \begin{solution}
+% % Uncomment and type your solution here
+% \end{solution}
+\end{parts}
+
+\question[10] Show how to find a collision in the Merkle tree construction if $t$ is not fixed. Specifically, show how to find two sets of inputs $x_1,\ldots,x_t$ and $x'_1,\ldots,x'_{2t}$ such that ${\cal MT}_t(x_1,\ldots,x_t)={\cal MT}_{2t}(x'_1,\ldots,x'_{2t})$.
+% \begin{solution}
+% % Uncomment and type your solution here
+% \end{solution}
+
+
+\end{questions}
+
+\end{document}

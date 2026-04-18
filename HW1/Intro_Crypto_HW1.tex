@@ -365,22 +365,6 @@ where $m \in \{0,1\}^n$, $k_1 \in \{0,1\}^k$, $k_2 \in \{0,1\}^\ell$, and $\Vert
 \question [10] Assume we require only that an encryption scheme $(\mathsf{Gen}, \mathsf{Enc},\mathsf{Dec})$ with message space $\mathcal{M}$ satisfy the following: For all $m \in \mathcal{M}$, we have $Pr[\mathsf{Dec}_K(\mathsf{Enc}_K(m)) = m] \geq 2^{-t}$. (This probability is taken over the choice of the key as well as any randomness used during encryption.) Show that perfect secrecy can be achieved with $|\mathcal{K}| < |\mathcal{M}|$ when $t\geq 1$. 
 
 \begin{solution}
-    Podemos encontrar una solución particular para este esquema que cumple la condición. Notemos que este esquema no cumple con correctitud. 
-
-    Tomamos $\mathcal{K} = \{1\}, Gen = 1, \mathcal{M} = \{0,1\}, t=1$.
-    \\ Queremos ver que $P(Dec(Enc(m)) = m) \geq \frac{1}{2}$.
-    Luego, si tomamos $Dec(1, m) = m$ y $Enc$ es una función que ignora su entrada y devuelve un $0$ o un $1$ con probabilidad $\frac{1}{2}$, entonces $P(Dec(Enc(m)) = m) = P(Enc(m) = m) = \frac{1}{2}$ 
-    Luego, se cumple la condición. 
-
-    Veamos ahora que cumple indistinguibilidad. Para mensajes $m_1, m_2 \in \mathcal{M}$ y un ciphertext $c \in \{0,1\}$ arbitrario, tenemos que:
-    \[
-        P(Enc(m_1) = c) = P(Enc(m_2) = c) = \frac{1}{2}
-    \]
-    Luego, cumple indistinguibilidad de manera trivial. Por ende es perfecto.
-
-\end{solution}
-
-\begin{solution}
     Sea el espacio de mensajes $\mathcal{M}$ tal que $|\mathcal{M}| = 2^t$. 
     Sea el espacio de claves trivial $\mathcal{K} = \{k_0\}$, por lo que $|\mathcal{K}| = 1$. 
     Como $t \ge 1$, se garantiza que $|\mathcal{M}| \ge 2$. Por lo tanto, se cumple $|\mathcal{K}| < |\mathcal{M}|$.
