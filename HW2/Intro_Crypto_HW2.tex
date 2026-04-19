@@ -116,7 +116,7 @@ for a total of \numpoints \ points.
     \begin{solution}
       Para decriptar, tenemos que reconocer los dos elementos de la tupla, $r$ y $F_r(k)\oplus m$. Luego, podemos generar $F_r(k)$ (dado que tenemos $k$) y hacer la inversa del XOR para obtener $m$. 
 
-      Vemos que este esquema tampoco es CPA-seguro. Para demostrarlo veamos el siguiente escenario. El adversario entrega $m_0$ y $m_1$ y recibe $ c = \langle r, F_r(k) \oplus m_b \rangle $. Luego, conoce $r$, y $F$ es una función pública. Pide al oráculo que encripte un $m_2$ tal que $m_2 = 0^n$ y recibe $ c' = \langle r_2, F_r(k) \oplus 0^n \rangle $. Entonces obtiene $F_{r_2}(k)$ haciendo el XOR con $0^n$.
+      Vemos que este esquema tampoco es CPA-seguro. Para demostrarlo veamos el siguiente escenario. El adversario entrega $m_0$ y $m_1$ y recibe $ c = \langle r, F_r(k) \oplus m_b \rangle $. Luego, conoce $r$, y $F$ es una función pública. Pide al oráculo que encripte un $m_2$ tal que $m_2 = 0^n$ y recibe $ c' = \langle r_2, F_{r_2}(k) \oplus 0^n \rangle $. Entonces obtiene $F_{r_2}(k)$ haciendo el XOR con $0^n$.
       
       Luego, para obtener $k$ puede hacer lo siguiente. Como $F$ es pública, tiene $r_2$ y tiene $F_{r_2}(k)$, $k = F_{r_2}^{-1}(F_{r_2}(k))$. 
      
@@ -206,20 +206,20 @@ for a total of \numpoints \ points.
   Una función $\mathsf{H} = (Gen, H)$ es resistente a la segunda preimagen si, para todo adversario PPT $\mathsf{A}$, existe una función negligible $negl(n)$ tal que:
 
   $$
-    \Pr[\text{SecondPreimage}_{\mathsf{A}, \mathsf{H}}(x) = 1] \leq negl(n)
+    \Pr[\text{SecondPreimage}_{\mathsf{A}, \mathsf{H}}(n) = 1] \leq negl(n)
   $$
 
 
   Veamos ahora la resistencia a la preimagen. Definimos el siguiente experimento:
   \begin{enumerate}
     \item Se genera una clave $s$ con $Gen(1^n)$
-    \item El adversario $\mathsf{A}$ recibe $s$ e $y$ tal que $y = H(x)$ (con $x$ elegido aleatoriamente de manera uniforme). Luego, el adversario devuelve $x'$.
+    \item El adversario $\mathsf{A}$ recibe $s$ e $y$ tal que $y = H^s(x)$ (con $x$ elegido aleatoriamente de manera uniforme). Luego, el adversario devuelve $x'$.
     \item El output del experimento es $1$ $\iff$ $y = H^s(x')$.
   \end{enumerate}
 
   Y definimos la resistencia a la preimagen como:
   $$
-    \Pr[\text{Preimage}_{\mathsf{A}, \mathsf{H}}(y) = 1] \leq negl(n)
+    \Pr[\text{Preimage}_{\mathsf{A}, \mathsf{H}}(n) = 1] \leq negl(n)
   $$
 
 \end{solution}
@@ -227,38 +227,42 @@ for a total of \numpoints \ points.
 \begin{solution}
   Veamos primero la primera implicación. Asumimos que tenemos una función $H$ que es resistente a la colisión y veamos que cumple con la resistencia a la segunda preimagen.
 
-  Vamos a demostrarlo por el absurdo: asumimos que H no es resistente a la segunda preimagen, es decir, que sí es posible encontrar, dado un $x$, un $x'$ tal que $H(x') = H(x)$ y $x' \neq x$. Pero vemos que esto significaría que pudimos encontrar un par $x, x'$ tal que $H(x) = H(x')$ (con $x neq x'$), contradiciendo la resistencia a la colisión de $H$. Absurdo! Luego, H es resistente a la segunda preimagen.
+  Vamos a demostrarlo por el absurdo: asumimos que H no es resistente a la segunda preimagen, es decir, que sí es posible encontrar, dado un $x$, un $x'$ tal que $H(x') = H(x)$ y $x' \neq x$. Pero vemos que esto significaría que pudimos encontrar un par $x, x'$ tal que $H(x) = H(x')$ (con $x \neq x'$), contradiciendo la resistencia a la colisión de $H$. Absurdo! Luego, H es resistente a la segunda preimagen.
 
-  Vamos con la segunda implicación. Asumimos que tenemos una función $H$ que es resistente a la segunda preimagen y veamos que cumple con la resistencia a la preimagen. Lo hacemos por el absurdo, asumiendo que existe un experimento $\mathsf{B}$ que gana el experimento de resistencia a la preimagen con probabilidad no negligible $\epsilon(n)$. Es decir, que $\mathsf{B}(x)$ devuelve un $x'$ tal que $H(x') = H(x)$. No necesariamente es distinto a $x$.
+  Vamos con la segunda implicación. Asumimos que $H : \{0,1\}^{l'} \to \{0,1\}^{l}$ comprime, con $l' = 2l$ (alcanza con $l' - l = \omega(\log n)$). Lo demostramos por el absurdo: supongamos que existe un adversario PPT $\mathsf{B}$ que gana el experimento de resistencia a la preimagen con probabilidad no negligible $\epsilon(n)$. Es decir, dados $s$ e $y = H^s(x)$ con $x$ uniforme, $\mathsf{B}(s, y)$ devuelve con probabilidad $\epsilon(n)$ algún $x'$ con $H^s(x') = y$ (no necesariamente $x' \neq x$).
 
-  Luego, para llegar a que esto genera un absurdo con la hipótesis de que H es resistente a la segunda preimagen, vemos que podemos generar un adversario $\mathsf{A}$ que gane el experimento de resistencia a la segunda preimagen con probabilidad no negligible. Construimos este adversario de la siguiente manera:
+  Construimos un adversario PPT $\mathsf{A}$ para el experimento de resistencia a la segunda preimagen:
   \begin{enumerate}
-    \item Recibo $x$. 
-    \item Computo $y := H(x)$
-    \item Computo $x' := \mathsf{B}(y)$
-    \item Si $x' \neq x$, y $\mathsf{B}(y) = x'$ ($\mathsf{B}$ tuvo éxito), devuelvo $x'$. Sino, devuelvo $\bot$.
+    \item Recibe $(s, x)$ con $x \leftarrow \{0,1\}^{l'}$ uniforme.
+    \item Computa $y := H^s(x)$.
+    \item Computa $x' := \mathsf{B}(s, y)$.
+    \item Si $H^s(x') = y$ y $x' \neq x$, devuelve $x'$. Sino, $\bot$.
   \end{enumerate}
 
-  Luego, necesitamos ver que $\mathsf{A}$ gana el experimento de con probabilidad no negligible.
+  Definimos los eventos (sobre la aleatoriedad de $x$, $s$ y $\mathsf{B}$):
+  \begin{itemize}
+    \item $W$: $\mathsf{B}$ tuvo éxito, es decir $H^s(x') = y$.
+    \item $E$: $x \in S$, donde $S = \{x \in \{0,1\}^{l'} : |(H^s)^{-1}(H^s(x))| \geq 2\}$ son los inputs que \emph{tienen} una segunda preimagen.
+  \end{itemize}
+  Notar que $\mathsf{A}$ gana exactamente cuando ocurre $W \wedge E \wedge (x' \neq x)$ (si $x \notin S$, la única preimagen es $x$, y $W$ forzaría $x' = x$).
 
-  Tomemos un $y$ fijo. Vemos que $H^{-1}(y) = \{x: H(x) = y\}$. Si analizamos el $x'$, vemos que está distribuido de manera uniforme sobre $H^{-1}(y)$. Luego, la probabilidad de que $\mathsf{B}$ encuentre un $x'$ tal que sea igual a $x$ es de $\frac{1}{|H^{-1}(y)|} $.
+  Cota sobre $\Pr[E]$. El complemento $\overline{S}$ tiene a lo sumo una preimagen por cada $y \in \{0,1\}^l$, luego $|\overline{S}| \leq 2^l$ y
+  $$\Pr[x \notin S] \leq \frac{2^l}{2^{l'}} = 2^{l-l'} = 2^{-l},$$
+  que es negligible en $n$.
 
-  Ahora hacemos una aclaración sobre $H$. Asumimos que su definición es $H : \{0, 1\}^{l'} \to \{0, 1\}^l$, con $l' \geq l+1$ (es decir, que $H$ comprime). Tomemos $l' = 2l$.
+  Cota sobre $\Pr[x' \neq x \mid W, E]$. $x$ es uniforme sobre $\{0,1\}^{l'}$, y por lo tanto, condicionado a $s$ y a $y = H^s(x)$, $x$ queda distribuido uniformemente sobre $(H^s)^{-1}(y)$. La salida $x'$ de $\mathsf{B}$ depende sólo de $(s, y)$ (no de $x$). Entonces, fijados $s, y, x'$,
+  $$\Pr[x' = x \mid s, y, x \in S] \leq \frac{1}{|(H^s)^{-1}(y)|} \leq \frac{1}{2}.$$
+  Luego $\Pr[x' \neq x \mid W, E] \geq \frac{1}{2}$.
 
-  Volvemos a la probabilidad de que $\mathsf{A}$ gane el experimento de resistencia a la segunda preimagen con probabilidad no negligible.
-
-  $$P[\mathsf{A} \text{ gana}] \geq P[\text{existe una solución}] \cdot P[\mathsf{B} \text{ gana}] \cdot P[x' \neq x]$$
-
-  Veamos la probabilidad de que exista una solución. No necesariamente todos los $x$ tiene un $x'\neq x$ tal que $H(x') = H(x)$. Definimos $S = \{x \in \{0, 1\}^{l'}: |H^{-1}(H(x))| \leq 2\}$. Osea, los inputs que tienen una colisión. Vemos que $|S| \geq 2^{l'} - 2^l$. Luego, $P[x \in S] \geq 1 - 2^{l' -l} \geq \frac{1}{2}$
-
-  Luego, vemos que la probabilidad de que $\mathsf{B}$ tenga éxito es no negligible, la llamamos $\epsilon(n)$.
-
-  Por último, analizamos la probabilidad de que $x' \neq x$. Vemos que, si existe una solución, es porque hay al menos dos $x$, $x'$ en $S$. Luego, encontrar el que es distinto a $x$ tiene probabilidad $\frac{1}{2}$. Si hay más de dos, la probabilidad es mayor. Luego, $P[x' \neq x] \geq \frac{1}{2}$.
-
-  Finalmente, vemos que:
-  $$P[\mathsf{A} \text{ gana}] \geq \frac{1}{2} \cdot \epsilon(n) \cdot \frac{1}{2} = \frac{\epsilon(n)}{4}$$
-
-  Y, como vimos que $\epsilon(n)$ es no negligible, vemos que $P[\mathsf{A} \text{ gana}] \geq \frac{\epsilon(n)}{4}$ es no negligible. Absurdo! Luego, H es resistente a la preimagen.
+  Juntando todo:
+  \begin{align*}
+    \Pr[\mathsf{A} \text{ gana}] &= \Pr[W \wedge E \wedge (x' \neq x)] \\
+    &= \Pr[W \wedge E] \cdot \Pr[x' \neq x \mid W, E] \\
+    &\geq \tfrac{1}{2} \cdot \Pr[W \wedge E] \\
+    &\geq \tfrac{1}{2} \cdot (\Pr[W] - \Pr[\overline{E}]) \\
+    &\geq \tfrac{1}{2} \cdot (\epsilon(n) - 2^{-l}).
+  \end{align*}
+  Como $\epsilon(n)$ es no negligible y $2^{-l}$ es negligible, $\Pr[\mathsf{A} \text{ gana}]$ es no negligible. Absurdo con la hipótesis de que $H$ es resistente a la segunda preimagen. Luego, $H$ es resistente a la preimagen.
 
 \end{solution}
 \end{parts}
