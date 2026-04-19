@@ -192,9 +192,37 @@ for a total of \numpoints \ points.
 \begin{parts}
 
 \part[5] Provide formal security definitions for {\em second preimage resistance} and {\em preimage resistance} of hash functions, similar to the definition of collision resistance we saw in Lecture 6. 
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+  Para definir resistencia a la segunda preimagen, definimos el siguiente experimento, similar al de resistencia a la colisión. En este experimento y el siguiente, la función de hash es $\mathsf{H} = (Gen, H)$.
+
+  \begin{enumerate}
+    \item Se genera una clave $s$ con $Gen(1^n)$
+    \item El adversario $\mathsf{A}$ recibe $s$ y $x$, un mensaje elegido de manera uniforme por el challenger. Notamos que si $H$ es de longitud fija, $x$ va a tener la longitud correspondiente. Luego, el adversario devuelve $x'$.
+    \item El output del experimento es $1$ $\iff$ $H^s(x') = H^s(x)$ y $x' \neq x$.
+  \end{enumerate}
+
+  Y definimos la resistencia a la segunda preimagen como:
+
+  Una función $\mathsf{H} = (Gen, H)$ es resistente a la segunda preimagen si, para todo adversario PPT $\mathsf{A}$, existe una función negligible $negl(n)$ tal que:
+
+  $$
+    \Pr[\text{SecondPreimage}_{\mathsf{A}, \mathsf{H}}(x) = 1] \leq negl(n)
+  $$
+
+
+  Veamos ahora la resistencia a la preimagen. Definimos el siguiente experimento:
+  \begin{enumerate}
+    \item Se genera una clave $s$ con $Gen(1^n)$
+    \item El adversario $\mathsf{A}$ recibe $s$ e $y$ tal que $y = H(x)$ (con $x$ elegido aleatoriamente de manera uniforme). Luego, el adversario devuelve $x'$.
+    \item El output del experimento es $1$ $\iff$ $y = H^s(x')$.
+  \end{enumerate}
+
+  Y definimos la resistencia a la preimagen como:
+  $$
+    \Pr[\text{Preimage}_{\mathsf{A}, \mathsf{H}}(y) = 1] \leq negl(n)
+  $$
+
+\end{solution}
 \part[5] Prove that any hash function that is collision resistant is second-preimage resistant, and any hash function that is second-preimage resistant is preimage resistant.
 % \begin{solution}
 % % Uncomment and type your solution here
