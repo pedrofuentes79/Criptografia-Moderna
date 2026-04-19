@@ -149,13 +149,42 @@ for a total of \numpoints \ points.
 \question Prove that the following modifications of basic CBC-MAC {\bf do not} yield a secure MAC (even for fixed-length messages):
 \begin{parts}
     \part[5] {\sf Mac} outputs all blocks $t_1,\ldots,t_\ell$, rather than just $t_\ell$. (Verification only checks whether $t_\ell$ is correct.)
-    % \begin{solution}
-    % % Uncomment and type your solution here
-    % \end{solution}
+    \begin{solution}
+      Para mostrar que el esquema no es seguro, mostramos una estrategia que permite ganar el experimento.
+
+      Sea $m = m_1 || m_2 || ... || m_l$. Pido al oráculo $MAC_k(m) = (t_1, t_2, ... , t_l)$. Hago lo mismo para $m' = m'_1 || m_2 || ... || m_l$, y pido al oráculo $MAC_k(m') = (t_1', ..., t'_l)$. Notar que $t_1 = F_k(m_1)$ y $t'_1 = F_k(m'_1)$.
+
+      Ahora definimos otro mensaje $m^* = m'_1 || t_1' \oplus t_1 \oplus m_2 || m_3 || ... || m_l$. 
+
+      Luego, vamos a construir el $MAC_k(m^*)$ sin pedirlo al oráculo de esta manera. 
+
+      $$t^*_1 = F_k(m'_1) = t'_1$$
+      $$t^*_2 = F_k(t'_1 \oplus t'_1 \oplus t_1 \oplus m_2) = F_k(t_1 \oplus m_2) = t_2$$
+      $$t^*_3 = F_k(t_2 \oplus m_3) = t_3$$
+
+      Y así sucesivamente hasta completar los $l$ bloques. De ese modo, construimos el tag de un mensaje $m^*$ sin haberlo pedido al oráculo. 
+    \end{solution}
     \part[5] A random initial block is used each time a message is authenticated. That is, choose uniform $t_0\in\{0,1\}^n$, run basic CBC-MAC over the ``message'' $t_0,m_1,\ldots,m_\ell$, and output the tag $\langle t_0,t_\ell\rangle$. Verification is done in the natural way.
-    % \begin{solution}
-    % % Uncomment and type your solution here
-    % \end{solution}
+    \begin{solution}
+
+      Tomamos un mensaje $m = m_1 || ... || m_l$. Luego pedimos su MAC y conseguimos $\langle t_0, t_l \rangle$.
+
+      Notamos que $t_1 = F_k(t_0 \oplus m_1)$ por la construcción del esquema, donde $t_0$ fue elegido al azar de manera uniforme por el oráculo de MAC.
+
+      Luego, definimos un mensaje $m^* = m_1^* || m_2 || m_3 || ... || m_l$. Le modificamos solo el primer bloque para ver si le podemos generar un tag sin pedirle al oráculo, solamente con la información de $m$. Para que sean distintos, necesito $m_1^* \neq m_1$
+
+      Veamos que necesitamos pedir lo siguiente:
+      $$t_1^* = F_k(t_0^* \oplus m_1^*) = t_1 = F_k(t_0 \oplus m_1)$$
+      Si se cumple esto, el resto de $t_i^*$ van a ser iguales a $t_i$ para cada $i=2...l$.
+
+      Digamos que $m_1^* = x \oplus m_1$, para algún $x \in \{0, 1\}^n$, con $x \neq 0^n$ (así es distinto a $m^*$). Luego, tenemos que $$F_k(t_0^* \oplus x \oplus m_1) = F_k(t_0 \oplus m_1)$$ 
+      Luego, para anular el $x$, podemos pedir que $t_0^* = t_0 \oplus x$.
+      De ese modo, $t_1^* = F_k(t_0 \oplus x \oplus x \oplus m_1) = F_k(t_0 \oplus m_1) = t_1$.
+      
+      Luego, conseguimos $t_l$ aplicando el resto del algoritmo, y $t_0^*$ es $t_0 \oplus x$. De ese modo, podemos generar el tag de $m^*$ sin pedirle al oráculo, es decir que $Vrfy(\langle t_0^*, t_l^* \rangle, m^*) = 1$.
+
+      
+    \end{solution}
 \end{parts}
 
 

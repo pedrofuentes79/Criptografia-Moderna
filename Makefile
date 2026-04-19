@@ -6,7 +6,6 @@ TEX_FILE := $(HW_DIR)/Intro_Crypto_HW$(LAST_HW).tex
 
 all:
 	latexmk -pdf -cd -jobname=Fuentes_HW$(LAST_HW) $(TEX_FILE)
-	@echo "Guardado como $(OUT_PDF)"
 
 clean:
 	latexmk -cd -C -jobname=Fuentes_HW$(LAST_HW) $(TEX_FILE)
