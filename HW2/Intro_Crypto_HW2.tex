@@ -264,9 +264,12 @@ for a total of \numpoints \ points.
 \end{parts}
 
 \question[10] Show how to find a collision in the Merkle tree construction if $t$ is not fixed. Specifically, show how to find two sets of inputs $x_1,\ldots,x_t$ and $x'_1,\ldots,x'_{2t}$ such that ${\cal MT}_t(x_1,\ldots,x_t)={\cal MT}_{2t}(x'_1,\ldots,x'_{2t})$.
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+  Para encontrar estos dos conjuntos, vamos a hacer lo siguiente. Vamos a "extender hacia abajo" el merkle tree chico, de $t$ hojas, para obtener un merkle tree grande, de $2t$ hojas. 
+
+  Asumimos que tenemos un conjunto cualquiera de $x'_1...x'_{2t}$. Definimos entonces $x_i = H(x'_{2i-1}) || H(x'_{2i})$ para $i = 1...t$. De ese modo, la i-ésima hoja del $MT_t$ es $h_i = H(x_i) = H(H(x'_{2i-1}) || H(x'_{2i}))$, que es exactamente lo mismo que $h_{2i-1,2i}$ del $MT_{2t}$. Vemos entonces que si comparamos el $MT_t$ con el $MT_{2t}$ recortado en el último nivel (es decir, sacándole todas las hojas), son exactamente iguales! 
+  Luego, van a tener la misma raíz. Luego, pudimos encontrar dos conjuntos $x_1...x_t$ y $x'_1...x'_{2t}$ tales que $MT_t(x_1...x_t) = MT_{2t}(x'_1...x'_{2t})$.
+\end{solution}
 
 
 \end{questions}
