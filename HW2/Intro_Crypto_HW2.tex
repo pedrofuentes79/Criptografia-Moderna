@@ -224,9 +224,43 @@ for a total of \numpoints \ points.
 
 \end{solution}
 \part[5] Prove that any hash function that is collision resistant is second-preimage resistant, and any hash function that is second-preimage resistant is preimage resistant.
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+  Veamos primero la primera implicación. Asumimos que tenemos una función $H$ que es resistente a la colisión y veamos que cumple con la resistencia a la segunda preimagen.
+
+  Vamos a demostrarlo por el absurdo: asumimos que H no es resistente a la segunda preimagen, es decir, que sí es posible encontrar, dado un $x$, un $x'$ tal que $H(x') = H(x)$ y $x' \neq x$. Pero vemos que esto significaría que pudimos encontrar un par $x, x'$ tal que $H(x) = H(x')$ (con $x neq x'$), contradiciendo la resistencia a la colisión de $H$. Absurdo! Luego, H es resistente a la segunda preimagen.
+
+  Vamos con la segunda implicación. Asumimos que tenemos una función $H$ que es resistente a la segunda preimagen y veamos que cumple con la resistencia a la preimagen. Lo hacemos por el absurdo, asumiendo que existe un experimento $\mathsf{B}$ que gana el experimento de resistencia a la preimagen con probabilidad no negligible $\epsilon(n)$. Es decir, que $\mathsf{B}(x)$ devuelve un $x'$ tal que $H(x') = H(x)$. No necesariamente es distinto a $x$.
+
+  Luego, para llegar a que esto genera un absurdo con la hipótesis de que H es resistente a la segunda preimagen, vemos que podemos generar un adversario $\mathsf{A}$ que gane el experimento de resistencia a la segunda preimagen con probabilidad no negligible. Construimos este adversario de la siguiente manera:
+  \begin{enumerate}
+    \item Recibo $x$. 
+    \item Computo $y := H(x)$
+    \item Computo $x' := \mathsf{B}(y)$
+    \item Si $x' \neq x$, y $\mathsf{B}(y) = x'$ ($\mathsf{B}$ tuvo éxito), devuelvo $x'$. Sino, devuelvo $\bot$.
+  \end{enumerate}
+
+  Luego, necesitamos ver que $\mathsf{A}$ gana el experimento de con probabilidad no negligible.
+
+  Tomemos un $y$ fijo. Vemos que $H^{-1}(y) = \{x: H(x) = y\}$. Si analizamos el $x'$, vemos que está distribuido de manera uniforme sobre $H^{-1}(y)$. Luego, la probabilidad de que $\mathsf{B}$ encuentre un $x'$ tal que sea igual a $x$ es de $\frac{1}{|H^{-1}(y)|} $.
+
+  Ahora hacemos una aclaración sobre $H$. Asumimos que su definición es $H : \{0, 1\}^{l'} \to \{0, 1\}^l$, con $l' \geq l+1$ (es decir, que $H$ comprime). Tomemos $l' = 2l$.
+
+  Volvemos a la probabilidad de que $\mathsf{A}$ gane el experimento de resistencia a la segunda preimagen con probabilidad no negligible.
+
+  $$P[\mathsf{A} \text{ gana}] \geq P[\text{existe una solución}] \cdot P[\mathsf{B} \text{ gana}] \cdot P[x' \neq x]$$
+
+  Veamos la probabilidad de que exista una solución. No necesariamente todos los $x$ tiene un $x'\neq x$ tal que $H(x') = H(x)$. Definimos $S = \{x \in \{0, 1\}^{l'}: |H^{-1}(H(x))| \leq 2\}$. Osea, los inputs que tienen una colisión. Vemos que $|S| \geq 2^{l'} - 2^l$. Luego, $P[x \in S] \geq 1 - 2^{l' -l} \geq \frac{1}{2}$
+
+  Luego, vemos que la probabilidad de que $\mathsf{B}$ tenga éxito es no negligible, la llamamos $\epsilon(n)$.
+
+  Por último, analizamos la probabilidad de que $x' \neq x$. Vemos que, si existe una solución, es porque hay al menos dos $x$, $x'$ en $S$. Luego, encontrar el que es distinto a $x$ tiene probabilidad $\frac{1}{2}$. Si hay más de dos, la probabilidad es mayor. Luego, $P[x' \neq x] \geq \frac{1}{2}$.
+
+  Finalmente, vemos que:
+  $$P[\mathsf{A} \text{ gana}] \geq \frac{1}{2} \cdot \epsilon(n) \cdot \frac{1}{2} = \frac{\epsilon(n)}{4}$$
+
+  Y, como vimos que $\epsilon(n)$ es no negligible, vemos que $P[\mathsf{A} \text{ gana}] \geq \frac{\epsilon(n)}{4}$ es no negligible. Absurdo! Luego, H es resistente a la preimagen.
+
+\end{solution}
 \end{parts}
 
 \question[10] Show how to find a collision in the Merkle tree construction if $t$ is not fixed. Specifically, show how to find two sets of inputs $x_1,\ldots,x_t$ and $x'_1,\ldots,x'_{2t}$ such that ${\cal MT}_t(x_1,\ldots,x_t)={\cal MT}_{2t}(x'_1,\ldots,x'_{2t})$.
@@ -236,5 +270,8 @@ for a total of \numpoints \ points.
 
 
 \end{questions}
+
+
+Nota: usé claude opus 4.7 para ayudarme con la demostración del ejercicio 4b, más que nada con la parte de las probabilidades de la última implicación. 
 
 \end{document}
