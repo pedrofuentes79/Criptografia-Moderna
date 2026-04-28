@@ -1,0 +1,165 @@
+\documentclass[12pt,addpoints,answers]{exam}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{microtype}
+\usepackage{xspace}
+\usepackage[svgnames]{xcolor}
+\usepackage[sc]{mathpazo}
+\usepackage{enumitem}
+\usepackage{bm}
+
+%----------Header--------------------%
+\def\course{{\sc Introduccion a la Criptografia Moderna}}
+\def\term{Depto. de Computaci\'{o}n, FCEN, UBA, 1er. Bimestre 2026}
+\def\prof{Lecturer: Juan Garay}
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{\arabic{page}}
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { \hfill \large{\course} \hfill }
+    \vspace{2mm}
+%    \hbox to 5.78in { \hfill \large{\prof} \hfill }
+%       \vspace{2mm}
+       \hbox to 5.78in { {\Large \hfill \textbf{#5}  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { \term \hfill \emph{#2}}
+       \hbox to 5.78in { {#3 \hfill \emph{#4}}}
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+\newcommand{\hw}[4]{\handout{#1}{#2}{#3}{#4}{Homework #1}}
+
+% -- For ignoring stuff -- %
+\newcommand{\ignore}[1]{}
+
+
+\begin{document}
+
+%----Specs: change accordingly-----%
+\newif\ifstudent % comment out false
+\studenttrue 
+% \studentfalse
+
+\def\hwnum{3}
+\def\issuedate{28/4/26}
+\def\duedate{12/5/26, 23:59 hs} % 
+\def\yourname{Pedro Fuentes Urfeig} % put your name here
+%------------------------------%
+
+\ifstudent
+\hw{\hwnum}{\issuedate}{Student: \yourname}{Due: \duedate}%
+\else
+\hw{\hwnum}{\issuedate}{\prof}{Due: \duedate}%
+\fi
+
+\noindent \textbf{Instructions}
+
+\begin{itemize}
+    \item Upload your solution to Campus; make sure it's only one file, and clearly write your name on the first page. Name the file \textsf{`$<$your last name$>$\_HW3.pdf.'} 
+    %{\bf Important:} Make sure to tap {\bf Turn in} after you upload your solution.   
+      
+     If you are proficient with \LaTeX, you may also typeset your submission and submit in PDF format. To do so, uncomment the ``\%\textbackslash begin\{solution\}'' and ``\%\textbackslash end\{solution\}'' lines and write your solution between those two command lines.
+    
+      \item Your solutions will be graded on \emph{correctness} and
+    \emph{clarity}. You should only submit work that you believe to be
+    correct.
+    % , and you will get significantly more partial credit if you     clearly identify the gap(s) in your solution.
+    
+    \item You may collaborate with others on this problem set.  However,
+    you must \textbf{{write up your own solutions}} and \textbf{{list
+      your collaborators and any external sources (including ChatGPT and similar generative AI chatbots)}} for each
+    problem. Be ready to explain your solutions orally to a member of the course's staff
+    if asked.
+    
+    \ignore{
+    \item For problems that require you to provide an algorithm, you must
+    give a precise description of the algorithm, together with a proof
+    of correctness and an analysis of its running time. You may use
+    algorithms from class as subroutines. You may also use any facts
+    that we proved in class or from the book.
+    } %IGNORE
+    
+\end{itemize}
+
+
+\noindent This assignment contains \numquestions\ questions,
+% \numpages\ pages
+for a total of \numpoints \ points.
+% and \numbonuspoints\ bonus points.
+
+\bigskip
+%\newpage
+
+\begin{questions}
+
+\question[10] Consider the following key-exchange protocol:
+\begin{enumerate}[label=(\alph*)]
+    \item Alice chooses uniform $k,r\in\{0,1\}^n$, and sends $s:=k\oplus r$ to Bob.
+    \item Bob chooses uniform $t\in\{0,1\}^n$, and sends $u:=s\oplus t$ to Alice.
+    \item Alice computes $w:=u\oplus r$ and sends $w$ to Bob.
+    \item Alice outputs $k$ and Bob outputs $w\oplus t$.
+\end{enumerate}
+Show that Alice and Bob output the same key. Analyze the security of the scheme (i.e., either prove its security or show a concrete attack).
+
+\begin{solution}
+  Veamos que computan la misma clave. 
+
+  $k_A := k$
+
+  $k_B := w \oplus t = u \oplus r \oplus t = s \oplus t \oplus r \oplus t = s \oplus r = k \oplus r \oplus r = k$ 
+
+  Veamos ahora que no es seguro. Si un atacante está viendo los mensajes que se intercambian Alice y Bob, puede hacer lo siguiente. 
+  En la primera comunicación, donde Alice le envía $s$, el adversario se lo guarda.
+  Luego, Cuando Bob envía $u$, el adversario puede computar $t := s \oplus u$.
+  Finalmente, cuando Bob envía $w$, el adversario computa $k_B := w \oplus t$. Y así consigue armar la clave de Bob y, por lo tanto, de Alice. 
+
+\end{solution}
+
+\question[10] Formally define the CDH assumption (i.e., first define a CDH experiment, and then use it to define what it means for the CDH problem to be hard). Prove that hardness of the CDH problem relative to $\mathcal{G}$ implies hardness of the discrete-logarithm problem relative to $\mathcal{G}$, and that hardness of the DDH problem relative to $\mathcal{G}$ implies hardness of the CDH problem relative to $\mathcal{G}$.
+% \begin{solution}
+% % Uncomment and type your solution here
+% \end{solution}
+
+
+\question Suppose you know two El Gamal ciphertexts $\langle c_1,c_2\rangle$ and $\langle c'_1,c'_2\rangle$ that encrypt unknown plaintexts $m$ and $m'$. You also know the public key $h$ and cyclic group generator $g$.
+\begin{parts}
+    \part[5] What information can you infer about $m$ and $m'$ if you observe that $c_1=c'_1$?
+    % \begin{solution}
+    % % Uncomment and type your solution here
+    % \end{solution}
+    \part[5] What information can you infer about $m$ and $m'$ if you observe that $c_1=g\cdot c'_1$?
+    % \begin{solution}
+    % % Uncomment and type your solution here
+    % \end{solution}
+\end{parts}
+
+
+\question[10] In class we showed that El Gamal encryption is {\em malleable}, and specifically that given a ciphertext $\langle c_1,c_2\rangle$ that is the encryption of some unknown message $m$, it is possible to produce a ciphertext $\langle c_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$ (for known $\alpha$). A receiver who receives both these ciphertexts might be suspicious since both ciphertexts share the first component. Show that it is possible to generate $\langle c'_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$, with $c'_1\neq c_1$ and $c'_2\neq c_2$.
+% \begin{solution}
+% % Uncomment and type your solution here
+% \end{solution}
+
+
+\question[10] Explain why the RSA exponents $e$ and $d$ must always be odd numbers.
+% \begin{solution}
+% % Uncomment and type your solution here
+% \end{solution}
+
+
+\question[10] Consider the RSA-based encryption scheme in which a user encrypts a message $m\in\{0,1\}^\ell$ with respect to the public key $\langle N,e\rangle$ by computing $\tilde{m}:=H(m)\parallel m$ and outputting the ciphertext $[\tilde{m}^e~\mathrm{mod}~N]$. (Here, let $H:\{0,1\}^\ell\rightarrow\{0,1\}^n$ and assume $\ell+n<\Vert N\Vert$.) The receiver recovers $\tilde{m}$ in the usual way and verifies that it has the correct form before outputting the $\ell$ least-significant bits as $m$. Prove or disprove that this scheme is CCA-secure if $H$ is modeled as a random oracle.
+% \begin{solution}
+% % Uncomment and type your solution here
+% \end{solution}
+
+
+
+\end{questions}
+
+\end{document}
