@@ -11,6 +11,7 @@
 \usepackage[sc]{mathpazo}
 \usepackage{enumitem}
 \usepackage{bm}
+\usepackage[mathscr]{euscript}
 
 %----------Header--------------------%
 \def\course{{\sc Introduccion a la Criptografia Moderna}}
@@ -123,9 +124,34 @@ Show that Alice and Bob output the same key. Analyze the security of the scheme 
 \end{solution}
 
 \question[10] Formally define the CDH assumption (i.e., first define a CDH experiment, and then use it to define what it means for the CDH problem to be hard). Prove that hardness of the CDH problem relative to $\mathcal{G}$ implies hardness of the discrete-logarithm problem relative to $\mathcal{G}$, and that hardness of the DDH problem relative to $\mathcal{G}$ implies hardness of the CDH problem relative to $\mathcal{G}$.
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+
+  Definimos el siguiente experimento $CDH$
+  \begin{enumerate}
+    \item Usar $\mathcal{G}(1^n)$ para obtener $(\mathscr{G}, q, g)$. 
+    \item Elegir $x_1$, $x_2$ de manera uniforme. 
+    \item Enviarle al adversario $\mathscr{A}(\mathscr{G}, q, g, g^{x_1}, g^{x_2})$ 
+    \item Si el adversario devuelve $g^{x_1 \cdot x_2}$, el experimento termina con resultado 1. Si no, 0. 
+  \end{enumerate}
+
+  Definimos CDH de la siguiente manera. El problema CDH es difícil relativo a $\mathcal{G}$ si el experimento descrito arriba tiene probabilidades negligibles de tener éxito. Es decir, 
+  $$Pr(CDH(\mathcal{G}, 1^n)) \leq negl(n)$$
+
+  Ahora, demostremos que la dificultad del problema CDH (relativa a $\mathcal{G}$) implica dificultad del problema de logaritmo discreto (relativa a $\mathcal{G}$). Podemos hacer la demostración por contrarrecíproco. Es decir, queremos demostrar que si el logaritmo discreto es fácil, CDH también lo es. 
+Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema del logaritmo discreto con probabilidad no negligible (es decir, dados $(\mathscr{G}, q, g, h)$, puede devolver $x$ tal que $g^x = h$). 
+  Luego, definimos un adversario $\mathscr{A}_{CDH}$ tal que hace lo siguiente. 
+  \begin{enumerate}
+    \item Recibe $(\mathscr{G}, q, g, g^{x_1}, g^{x_2})$. 
+    \item Obtiene $x_1 := \mathscr{A}_{DLOG}(\mathscr{G}, q, g, g^{x_1})$
+    \item Devuelve $(g^{x_2})^{x_1}$
+  \end{enumerate}
+
+  Vemos que este adversario tiene probabilidad no negligible de ganar el experimento, ya que su probabilidad de éxito depende únicamente de la probabilidad (no negligible) de que $\mathscr{A}_{DLOG}$ tenga éxito. 
+
+
+  Ahora, demostremos que la dificultad del problema DDH (relativo a $\mathcal{G}$) implica la dificultad del problema CDH (relativo a $\mathcal{G}$). 
+
+\end{solution}
 
 
 \question Suppose you know two El Gamal ciphertexts $\langle c_1,c_2\rangle$ and $\langle c'_1,c'_2\rangle$ that encrypt unknown plaintexts $m$ and $m'$. You also know the public key $h$ and cyclic group generator $g$.
