@@ -128,9 +128,9 @@ Show that Alice and Bob output the same key. Analyze the security of the scheme 
 
   Definimos el siguiente experimento $CDH$
   \begin{enumerate}
-    \item Usar $\mathcal{G}(1^n)$ para obtener $(\mathscr{G}, q, g)$. 
+    \item Usar $\mathcal{G}(1^n)$ para obtener $(\mathbb{G}, q, g)$. 
     \item Elegir $x_1$, $x_2$ de manera uniforme. 
-    \item Enviarle al adversario $\mathscr{A}(\mathscr{G}, q, g, g^{x_1}, g^{x_2})$ 
+    \item Enviarle al adversario $\mathscr{A}(\mathbb{G}, q, g, g^{x_1}, g^{x_2})$ 
     \item Si el adversario devuelve $g^{x_1 \cdot x_2}$, el experimento termina con resultado 1. Si no, 0. 
   \end{enumerate}
 
@@ -138,18 +138,35 @@ Show that Alice and Bob output the same key. Analyze the security of the scheme 
   $$Pr(CDH(\mathcal{G}, 1^n)) \leq negl(n)$$
 
   Ahora, demostremos que la dificultad del problema CDH (relativa a $\mathcal{G}$) implica dificultad del problema de logaritmo discreto (relativa a $\mathcal{G}$). Podemos hacer la demostración por contrarrecíproco. Es decir, queremos demostrar que si el logaritmo discreto es fácil, CDH también lo es. 
-Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema del logaritmo discreto con probabilidad no negligible (es decir, dados $(\mathscr{G}, q, g, h)$, puede devolver $x$ tal que $g^x = h$). 
+Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema del logaritmo discreto con probabilidad no negligible (es decir, dados $(\mathbb{G}, q, g, h)$, puede devolver $x$ tal que $g^x = h$). 
   Luego, definimos un adversario $\mathscr{A}_{CDH}$ tal que hace lo siguiente. 
   \begin{enumerate}
-    \item Recibe $(\mathscr{G}, q, g, g^{x_1}, g^{x_2})$. 
-    \item Obtiene $x_1 := \mathscr{A}_{DLOG}(\mathscr{G}, q, g, g^{x_1})$
+    \item Recibe $(\mathbb{G}, q, g, g^{x_1}, g^{x_2})$. 
+    \item Obtiene $x_1 := \mathscr{A}_{DLOG}(\mathbb{G}, q, g, g^{x_1})$
     \item Devuelve $(g^{x_2})^{x_1}$
   \end{enumerate}
 
   Vemos que este adversario tiene probabilidad no negligible de ganar el experimento, ya que su probabilidad de éxito depende únicamente de la probabilidad (no negligible) de que $\mathscr{A}_{DLOG}$ tenga éxito. 
 
 
+
   Ahora, demostremos que la dificultad del problema DDH (relativo a $\mathcal{G}$) implica la dificultad del problema CDH (relativo a $\mathcal{G}$). 
+  Vemos que el problema DDH implica que un adversario distinga entre $g^z$ (con $z$ uniforme) y $g^{x_1 \cdot x_2}$, siendo $x_1$, $x_2$ elegidos de manera uniforme. La definición es:
+
+  $$\left| \Pr[\mathcal{A}(\mathbb{G}, q, g, g^{x_1}, g^{x_2}, g^z) = 1] - \Pr[\mathcal{A}(\mathbb{G}, q, g, g^{x_1}, g^{x_2}, g^{x_1\cdot x_2}) = 1] \right| \leq \mathsf{negl}(n)$$
+
+   Veamos la demostración por el contrarrecíproco. Quiero ver que, si el problema CDH es fácil con respecto a $\mathcal{G}$, entonces el problema DDH es fácil con respecto a $\mathcal{G}$. 
+
+   Asumimos entonces que tenemos un algoritmo que resuelve CDH con probabilidad no negligible, y queremos resolver DDH con probabilidad no negligible. 
+   Construimos un adversario $\mathscr{A}_{DDH}$ que hace lo siguiente. 
+   \begin{enumerate}
+    \item Recibe $(\mathbb{G}, q, g, g^{x_1}, g^{x_2}, g^k)$. El adversario no sabe si $k$ es un valor uniforme cualquiera, o si $k = x_1 \cdot x_2$.
+    \item Obtiene $x_1 := CDH(\mathbb{G}, q, g, g^{x_1}$. CDH tiene éxito con probabilidad no negligible. 
+    \item Luego, computa $h := (g^{x_2})^{x_1}$, puesto que $g^{x_2}$ es un parámetro que recibe. Luego, si CDH tuvo éxito, $h = g^{x_1 \cdot x_2}$
+    \item Finalmente, devuelve $1$ si $g^k = g^{x_1 \cdot x_2}$, $0$ si no.
+   \end{enumerate}
+
+   Vemos que la probabilidad de que este adversario tenga éxito es la misma probabilidad de que CDH tenga éxito. Luego, este adversario tiene éxito con probabilidad no negligible de distinguir entre un $g^k$ con $k$ arbitrario y $g^{x_1 \cdot x_2}$
 
 \end{solution}
 
