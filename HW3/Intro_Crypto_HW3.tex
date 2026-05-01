@@ -201,6 +201,21 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
 
 \question[10] In class we showed that El Gamal encryption is {\em malleable}, and specifically that given a ciphertext $\langle c_1,c_2\rangle$ that is the encryption of some unknown message $m$, it is possible to produce a ciphertext $\langle c_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$ (for known $\alpha$). A receiver who receives both these ciphertexts might be suspicious since both ciphertexts share the first component. Show that it is possible to generate $\langle c'_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$, with $c'_1\neq c_1$ and $c'_2\neq c_2$.
 \begin{solution}
+  Nos podemos basar en el ejercicio anterior para construir los $c'_1, c'_2 y m'$.
+  
+  Sabemos que $c'_1 := g^{y'}, c'_2 := h{y'} \cdot \alpha \cdot m$. Tomamos $\alpha = h$, conocido.  
+
+  Vemos que $c'_2 = h^{y'}\cdot h \cdot m$. Si tomamos $c'_1 = c_1 \cdot g$, ambos conocidos, nos queda $y' = y +1$. 
+
+  Luego, $c'_2 = h^y \cdot m \cdot h^2 = c_2 \cdot h^2$. Ambos son conocidos. 
+
+  Finalmente, nos queda que $c'_1 = c_1 \cdot g$, $c'_2 = c_2 \cdot h^2$ y $m' = h \cdot m$. Se verifica que $c_1 \neq c'_1$ y que $c_2 \neq c'_2$
+
+  Verificamos que $Dec_{SK}(\langle c_1 \cdot g, c_2 \cdot h^2) = m' = h^m$. Recordemos que $h = g^x$.
+
+  $$Dec_{SK}(\langle c'_1, c'_2 \rangle) = \frac{c_2 \cdot h^2}{(c_1 \cdot g)^x} = \frac{h^y \cdot h^2 \cdot m}{g^{xy} \cdot g^x} = \frac{g^{xy} \cdot g^x \cdot g^x \cdot m}{g^{xy} \cdot g^x} = g^x \cdot m = h \cdot m = m'$$ 
+
+  \qed
 
 \end{solution}
 
