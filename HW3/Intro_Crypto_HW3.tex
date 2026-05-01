@@ -174,20 +174,35 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
 \question Suppose you know two El Gamal ciphertexts $\langle c_1,c_2\rangle$ and $\langle c'_1,c'_2\rangle$ that encrypt unknown plaintexts $m$ and $m'$. You also know the public key $h$ and cyclic group generator $g$.
 \begin{parts}
     \part[5] What information can you infer about $m$ and $m'$ if you observe that $c_1=c'_1$?
-    % \begin{solution}
-    % % Uncomment and type your solution here
-    % \end{solution}
+    \begin{solution}
+      Dada la construcción de los ciphertexts de El Gamal, podemos ver que la única razón para que eso sea cierto (asumiendo que ambos ciphertexts son generados con el mismo $g$) es porque $y = y'$, donde $y$ es un elemento de $\mathbb{Z}_q$ elegido de manera uniforme en la llamada a $ENC$. 
+
+      Luego, veamos qué consecuencias tiene esto para $c_2$ y $c'_2$
+
+      $c'_2 = h^y \cdot m' = \frac{c_2}{m} \cdot m'$. Luego, $\frac{m'}{m} = \frac{c'_2}{c_2}$.
+
+    \end{solution}
     \part[5] What information can you infer about $m$ and $m'$ if you observe that $c_1=g\cdot c'_1$?
-    % \begin{solution}
-    % % Uncomment and type your solution here
-    % \end{solution}
+    \begin{solution}
+      Por construcción de $c_1$ y $c'_1$, sabemos esto.
+
+
+      $c_1 = g^y = g \cdot c'_1 = g \cdot g^{y'} = g^{y'+1}$
+
+
+      Luego, $y = y' + 1$. Veamos qué implica esto para $c_2 y c'-2$. 
+
+      $c'_2 = h^{y-1} \cdot m' = h^y \cdot h^{-1} \cdot m' = \frac{c_2}{m} \cdot h^{-1} \cdot m'$
+
+      Si reacomodamos, $\frac{m'}{m} = \frac{c'_2 \cdot h}{c_2}$
+    \end{solution}
 \end{parts}
 
 
 \question[10] In class we showed that El Gamal encryption is {\em malleable}, and specifically that given a ciphertext $\langle c_1,c_2\rangle$ that is the encryption of some unknown message $m$, it is possible to produce a ciphertext $\langle c_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$ (for known $\alpha$). A receiver who receives both these ciphertexts might be suspicious since both ciphertexts share the first component. Show that it is possible to generate $\langle c'_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$, with $c'_1\neq c_1$ and $c'_2\neq c_2$.
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+
+\end{solution}
 
 
 \question[10] Explain why the RSA exponents $e$ and $d$ must always be odd numbers.
