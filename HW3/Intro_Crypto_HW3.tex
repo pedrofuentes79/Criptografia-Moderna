@@ -161,7 +161,7 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
    Construimos un adversario $\mathscr{A}_{DDH}$ que hace lo siguiente. 
    \begin{enumerate}
     \item Recibe $(\mathbb{G}, q, g, g^{x_1}, g^{x_2}, g^k)$. El adversario no sabe si $k$ es un valor uniforme cualquiera, o si $k = x_1 \cdot x_2$.
-    \item Obtiene $x_1 := CDH(\mathbb{G}, q, g, g^{x_1}$. CDH tiene éxito con probabilidad no negligible. 
+    \item Obtiene $x_1 := CDH(\mathbb{G}, q, g, g^{x_1})$. CDH tiene éxito con probabilidad no negligible.
     \item Luego, computa $h := (g^{x_2})^{x_1}$, puesto que $g^{x_2}$ es un parámetro que recibe. Luego, si CDH tuvo éxito, $h = g^{x_1 \cdot x_2}$
     \item Finalmente, devuelve $1$ si $g^k = g^{x_1 \cdot x_2}$, $0$ si no.
    \end{enumerate}
@@ -190,7 +190,7 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
       $c_1 = g^y = g \cdot c'_1 = g \cdot g^{y'} = g^{y'+1}$
 
 
-      Luego, $y = y' + 1$. Veamos qué implica esto para $c_2 y c'-2$. 
+      Luego, $y = y' + 1$. Veamos qué implica esto para $c_2$ y $c'_2$.
 
       $c'_2 = h^{y-1} \cdot m' = h^y \cdot h^{-1} \cdot m' = \frac{c_2}{m} \cdot h^{-1} \cdot m'$
 
@@ -201,9 +201,9 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
 
 \question[10] In class we showed that El Gamal encryption is {\em malleable}, and specifically that given a ciphertext $\langle c_1,c_2\rangle$ that is the encryption of some unknown message $m$, it is possible to produce a ciphertext $\langle c_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$ (for known $\alpha$). A receiver who receives both these ciphertexts might be suspicious since both ciphertexts share the first component. Show that it is possible to generate $\langle c'_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$, with $c'_1\neq c_1$ and $c'_2\neq c_2$.
 \begin{solution}
-  Nos podemos basar en el ejercicio anterior para construir los $c'_1, c'_2 y m'$.
+  Nos podemos basar en el ejercicio anterior para construir los $c'_1$, $c'_2$ y $m'$.
   
-  Sabemos que $c'_1 := g^{y'}, c'_2 := h{y'} \cdot \alpha \cdot m$. Tomamos $\alpha = h$, conocido.  
+  Sabemos que $c'_1 := g^{y'}, c'_2 := h^{y'} \cdot \alpha \cdot m$. Tomamos $\alpha = h$, conocido.
 
   Vemos que $c'_2 = h^{y'}\cdot h \cdot m$. Si tomamos $c'_1 = c_1 \cdot g$, ambos conocidos, nos queda $y' = y +1$. 
 
@@ -211,7 +211,7 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
 
   Finalmente, nos queda que $c'_1 = c_1 \cdot g$, $c'_2 = c_2 \cdot h^2$ y $m' = h \cdot m$. Se verifica que $c_1 \neq c'_1$ y que $c_2 \neq c'_2$
 
-  Verificamos que $Dec_{SK}(\langle c_1 \cdot g, c_2 \cdot h^2) = m' = h^m$. Recordemos que $h = g^x$.
+  Verificamos que $Dec_{SK}(\langle c_1 \cdot g, c_2 \cdot h^2 \rangle) = m' = h \cdot m$. Recordemos que $h = g^x$.
 
   $$Dec_{SK}(\langle c'_1, c'_2 \rangle) = \frac{c_2 \cdot h^2}{(c_1 \cdot g)^x} = \frac{h^y \cdot h^2 \cdot m}{g^{xy} \cdot g^x} = \frac{g^{xy} \cdot g^x \cdot g^x \cdot m}{g^{xy} \cdot g^x} = g^x \cdot m = h \cdot m = m'$$ 
 
@@ -221,15 +221,32 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
 
 
 \question[10] Explain why the RSA exponents $e$ and $d$ must always be odd numbers.
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+  Veamos primero que $e$ tiene que ser impar. Para empezar, vemos que $\phi(N) = (p-1)(q-1)$, por lo tanto es par, ya que $p$ y $q$ son números primos grandes (por ende ninguno es $2$, el único primo par). Luego, como las condiciones de $e$ son que sea mayor a $1$ y que $gcd(e, \phi(N)) = 1$, $e$ no puede ser par. Si lo fuese, compartiría un divisor con $\phi(N)$ y el $gcd$ no sería $1$. 
+
+  Veamos ahora lo mismo para $d$. Como $d$ se define en base a $e$, vamos a usar que $e$ es impar. Dado que $d := e^{-1} \bmod \phi(N)$, podemos expresarlo como que $e \cdot d \equiv 1 \pmod{\phi(N)}$. Es decir, existe un $k$ tal que $e \cdot d = k \cdot \phi(N) + 1$. Luego, vemos que el lado derecho es impar. Como $e$ es impar, el lado izquierdo solamente puede ser impar si $d$ es impar. Luego, $d$ es impar por definición.
+\end{solution}
 
 
 \question[10] Consider the RSA-based encryption scheme in which a user encrypts a message $m\in\{0,1\}^\ell$ with respect to the public key $\langle N,e\rangle$ by computing $\tilde{m}:=H(m)\parallel m$ and outputting the ciphertext $[\tilde{m}^e~\mathrm{mod}~N]$. (Here, let $H:\{0,1\}^\ell\rightarrow\{0,1\}^n$ and assume $\ell+n<\Vert N\Vert$.) The receiver recovers $\tilde{m}$ in the usual way and verifies that it has the correct form before outputting the $\ell$ least-significant bits as $m$. Prove or disprove that this scheme is CCA-secure if $H$ is modeled as a random oracle.
-% \begin{solution}
-% % Uncomment and type your solution here
-% \end{solution}
+\begin{solution}
+  Vemos que no es CCA-seguro. Para verlo, definimos un adversario que tiene éxito con probabilidad mayor o igual a $\frac{1}{2} + negl(n)$ en el experimento de $PubK$:
+  \begin{enumerate}
+    \item Se corre $Gen(1^n)$ para obtener las claves $(pk, sk)$. En este caso son $(\langle N, e\rangle, d)$
+    \item El adversario $\mathbb{A}$ recibe $pk$ y acceso al oráculo $Dec_{sk}$. Devuelve un par de mensajes $m_0$ y $m_1$ de distinta longitud en el espacio de mensajes relacionado con $pk$. 
+    \item Se elige de manera uniforme un bit $b \in \{0, 1\}$ y se envía $c := Enc_{pk}(m_b)$ a $\mathbb{A}$
+    \item El adversario puede interactuar con el oráculo, pero no puede pedirle $Dec_{sk}(c)$. Luego, $\mathbb{A}$ devuelve $b'$
+    \item El resultado del experimento es $1$ si $b' = b$. 
+  \end{enumerate}
+
+  El adversario va a hacer lo siguiente. Dado que elige $m_0$ y $m_1$, va a computar $c_0$ y $c_1$ tal que $c_i := (H(m_i) || m_i)^e \bmod N$. 
+  Luego, cuando recibe $c$, lo compara con ambos y devuelve $b'=0$ si $c_0 = c$ y $b'=1$ si $c_1 = c$. 
+
+  Luego, esto lo hace con probabilidad $1$, ya que $H$ es determinística.
+
+  Luego, el esquema no es CCA-seguro. 
+
+\end{solution}
 
 
 
