@@ -119,7 +119,7 @@ Show that Alice and Bob output the same key. Analyze the security of the scheme 
   Veamos ahora que no es seguro. Si un atacante está viendo los mensajes que se intercambian Alice y Bob, puede hacer lo siguiente. 
   En la primera comunicación, donde Alice le envía $s$, el adversario se lo guarda.
   Luego, Cuando Bob envía $u$, el adversario puede computar $t := s \oplus u$.
-  Finalmente, cuando Bob envía $w$, el adversario computa $k_B := w \oplus t$. Y así consigue armar la clave de Bob y, por lo tanto, de Alice. 
+  Finalmente, cuando Alice envía $w$, el adversario computa $k_B := w \oplus t$. Y así consigue armar la clave de Bob y, por lo tanto, de Alice.
 
 \end{solution}
 
@@ -134,8 +134,8 @@ Show that Alice and Bob output the same key. Analyze the security of the scheme 
     \item Si el adversario devuelve $g^{x_1 \cdot x_2}$, el experimento termina con resultado 1. Si no, 0. 
   \end{enumerate}
 
-  Definimos CDH de la siguiente manera. El problema CDH es difícil relativo a $\mathcal{G}$ si el experimento descrito arriba tiene probabilidades negligibles de tener éxito. Es decir, 
-  $$Pr(CDH(\mathcal{G}, 1^n)) \leq negl(n)$$
+  Definimos CDH de la siguiente manera. El problema CDH es difícil relativo a $\mathcal{G}$ si para todo adversario PPT $\mathscr{A}$, el experimento descrito arriba tiene probabilidades negligibles de tener éxito. Es decir,
+  $$\Pr[CDH_{\mathscr{A}, \mathcal{G}}(n) = 1] \leq negl(n)$$
 
   Ahora, demostremos que la dificultad del problema CDH (relativa a $\mathcal{G}$) implica dificultad del problema de logaritmo discreto (relativa a $\mathcal{G}$). Podemos hacer la demostración por contrarrecíproco. Es decir, queremos demostrar que si el logaritmo discreto es fácil, CDH también lo es. 
 Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema del logaritmo discreto con probabilidad no negligible (es decir, dados $(\mathbb{G}, q, g, h)$, puede devolver $x$ tal que $g^x = h$). 
@@ -157,16 +157,15 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
 
    Veamos la demostración por el contrarrecíproco. Quiero ver que, si el problema CDH es fácil con respecto a $\mathcal{G}$, entonces el problema DDH es fácil con respecto a $\mathcal{G}$. 
 
-   Asumimos entonces que tenemos un algoritmo que resuelve CDH con probabilidad no negligible, y queremos resolver DDH con probabilidad no negligible. 
-   Construimos un adversario $\mathscr{A}_{DDH}$ que hace lo siguiente. 
+   Asumimos entonces que tenemos un algoritmo que resuelve CDH con probabilidad no negligible, y queremos resolver DDH con probabilidad no negligible.
+   Construimos un adversario $\mathscr{A}_{DDH}$ que hace lo siguiente.
    \begin{enumerate}
     \item Recibe $(\mathbb{G}, q, g, g^{x_1}, g^{x_2}, g^k)$. El adversario no sabe si $k$ es un valor uniforme cualquiera, o si $k = x_1 \cdot x_2$.
-    \item Obtiene $x_1 := CDH(\mathbb{G}, q, g, g^{x_1})$. CDH tiene éxito con probabilidad no negligible.
-    \item Luego, computa $h := (g^{x_2})^{x_1}$, puesto que $g^{x_2}$ es un parámetro que recibe. Luego, si CDH tuvo éxito, $h = g^{x_1 \cdot x_2}$
-    \item Finalmente, devuelve $1$ si $g^k = g^{x_1 \cdot x_2}$, $0$ si no.
+    \item Computa $h := CDH(\mathbb{G}, q, g, g^{x_1}, g^{x_2})$. Con probabilidad no negligible, $h = g^{x_1 \cdot x_2}$.
+    \item Devuelve $1$ si $g^k = h$, $0$ si no.
    \end{enumerate}
 
-   Vemos que la probabilidad de que este adversario tenga éxito es la misma probabilidad de que CDH tenga éxito. Luego, este adversario tiene éxito con probabilidad no negligible de distinguir entre un $g^k$ con $k$ arbitrario y $g^{x_1 \cdot x_2}$
+   Veamos que este adversario distingue con probabilidad no negligible. Si la entrada es del tipo $(g^{x_1}, g^{x_2}, g^{x_1 \cdot x_2})$, entonces cuando CDH tiene éxito (con probabilidad no negligible) se cumple $h = g^{x_1 \cdot x_2} = g^k$, y $\mathscr{A}_{DDH}$ devuelve $1$. En cambio, si la entrada es $(g^{x_1}, g^{x_2}, g^z)$ con $z$ uniforme, la probabilidad de que $g^z = h$ es $1/q$ (negligible). Luego, la diferencia de probabilidades es no negligible, contradiciendo la dificultad de DDH.
 
 \end{solution}
 
@@ -201,19 +200,15 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
 
 \question[10] In class we showed that El Gamal encryption is {\em malleable}, and specifically that given a ciphertext $\langle c_1,c_2\rangle$ that is the encryption of some unknown message $m$, it is possible to produce a ciphertext $\langle c_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$ (for known $\alpha$). A receiver who receives both these ciphertexts might be suspicious since both ciphertexts share the first component. Show that it is possible to generate $\langle c'_1,c'_2\rangle$ that is the encryption of $\alpha\cdot m$, with $c'_1\neq c_1$ and $c'_2\neq c_2$.
 \begin{solution}
-  Nos podemos basar en el ejercicio anterior para construir los $c'_1$, $c'_2$ y $m'$.
-  
-  Sabemos que $c'_1 := g^{y'}, c'_2 := h^{y'} \cdot \alpha \cdot m$. Tomamos $\alpha = h$, conocido.
+  Elegimos $r \in \mathbb{Z}_q$ uniforme (con $r \neq 0$) y definimos
+  $$c'_1 := c_1 \cdot g^r, \qquad c'_2 := c_2 \cdot \alpha \cdot h^r.$$
 
-  Vemos que $c'_2 = h^{y'}\cdot h \cdot m$. Si tomamos $c'_1 = c_1 \cdot g$, ambos conocidos, nos queda $y' = y +1$. 
+  Ambos son computables a partir de la información pública ($g$, $h$, $\alpha$) y del ciphertext original $\langle c_1, c_2\rangle$. Notemos que $c'_1 \neq c_1$ pues $r \neq 0$, y $c'_2 \neq c_2$ siempre que $\alpha \cdot h^r \neq 1$, lo cual ocurre con probabilidad abrumadora sobre la elección de $r$.
 
-  Luego, $c'_2 = h^y \cdot m \cdot h^2 = c_2 \cdot h^2$. Ambos son conocidos. 
+  Verifiquemos que $\langle c'_1, c'_2\rangle$ desencripta a $\alpha \cdot m$. Recordemos que $h = g^x$, $c_1 = g^y$ y $c_2 = h^y \cdot m$.
+  $$Dec_{SK}(\langle c'_1, c'_2 \rangle) = \frac{c'_2}{(c'_1)^x} = \frac{c_2 \cdot \alpha \cdot h^r}{(c_1 \cdot g^r)^x} = \frac{h^y \cdot m \cdot \alpha \cdot h^r}{g^{xy} \cdot g^{xr}} = \frac{h^{y+r} \cdot \alpha \cdot m}{h^{y+r}} = \alpha \cdot m.$$
 
-  Finalmente, nos queda que $c'_1 = c_1 \cdot g$, $c'_2 = c_2 \cdot h^2$ y $m' = h \cdot m$. Se verifica que $c_1 \neq c'_1$ y que $c_2 \neq c'_2$
-
-  Verificamos que $Dec_{SK}(\langle c_1 \cdot g, c_2 \cdot h^2 \rangle) = m' = h \cdot m$. Recordemos que $h = g^x$.
-
-  $$Dec_{SK}(\langle c'_1, c'_2 \rangle) = \frac{c_2 \cdot h^2}{(c_1 \cdot g)^x} = \frac{h^y \cdot h^2 \cdot m}{g^{xy} \cdot g^x} = \frac{g^{xy} \cdot g^x \cdot g^x \cdot m}{g^{xy} \cdot g^x} = g^x \cdot m = h \cdot m = m'$$ 
+  Es decir, $\langle c'_1, c'_2\rangle$ es una encripción válida de $\alpha \cdot m$ con $c'_1 \neq c_1$ y $c'_2 \neq c_2$, para cualquier $\alpha$ conocido.
 
   \qed
 
@@ -233,7 +228,7 @@ Asumimos que tenemos un adversario $\mathscr{A}_{DLOG}$ que resuelve el problema
   Vemos que no es CCA-seguro. Para verlo, definimos un adversario que tiene éxito con probabilidad mayor o igual a $\frac{1}{2} + negl(n)$ en el experimento de $PubK$:
   \begin{enumerate}
     \item Se corre $Gen(1^n)$ para obtener las claves $(pk, sk)$. En este caso son $(\langle N, e\rangle, d)$
-    \item El adversario $\mathbb{A}$ recibe $pk$ y acceso al oráculo $Dec_{sk}$. Devuelve un par de mensajes $m_0$ y $m_1$ de distinta longitud en el espacio de mensajes relacionado con $pk$. 
+    \item El adversario $\mathbb{A}$ recibe $pk$ y acceso al oráculo $Dec_{sk}$. Devuelve un par de mensajes $m_0$ y $m_1$ de igual longitud en el espacio de mensajes relacionado con $pk$.
     \item Se elige de manera uniforme un bit $b \in \{0, 1\}$ y se envía $c := Enc_{pk}(m_b)$ a $\mathbb{A}$
     \item El adversario puede interactuar con el oráculo, pero no puede pedirle $Dec_{sk}(c)$. Luego, $\mathbb{A}$ devuelve $b'$
     \item El resultado del experimento es $1$ si $b' = b$. 
